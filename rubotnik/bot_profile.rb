@@ -18,11 +18,7 @@ module Rubotnik
         greeting: [
           {
             locale: 'default',
-            text: "Hello and welcome, {{user_first_name}}! Say 'hi!'"
-          },
-          {
-            locale: 'fr_FR',
-            text: 'Bienvenue, {{user_first_name}}!'
+            text: "Hola {{user_first_name}}! Bienvenido'"
           }
         ]
       }, access_token: ENV['ACCESS_TOKEN'])

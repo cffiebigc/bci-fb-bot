@@ -22,8 +22,8 @@ Rubotnik::PersistentMenu.enable
 # NOTE: QuickReplies.build should be called with a splat operator
 # if a set of quick replies is an array of arrays.
 # e.g. UI::QuickReplies.build(*replies)
-HINTS = UI::QuickReplies.build(['Where am I?', 'LOCATION'],
-                               ['Take questionnaire', 'QUESTIONNAIRE'])
+HINTS = UI::QuickReplies.build(['Indicadores', 'INDICADORES'],
+                               ['descuentos cercanos', 'LOCATION'])
 
 # Build a quick reply that prompts location from user
 LOCATION_PROMPT = UI::QuickReplies.location
@@ -46,29 +46,15 @@ Bot.on :message do |message|
 
     # Use with 'to:' syntax to bind to a command found inside Commands
     # or its sub-modules.
-    bind 'carousel', 'generic template', to: :show_carousel
-    bind 'button', 'template', all: true, to: :show_button_template
-    bind 'image', to: :send_image
-
-    # bind also takes regexps directly
-    bind(/my name/i, /mon nom/i) do
-      user_info = get_user_info(:first_name)
-      if user_info
-        user_name = user_info[:first_name]
-        say "Your name is #{user_name}!"
-      else
-        say 'I could not get your name, sorry :('
-      end
-    end
 
     # Use with block if you want to provide response behaviour
     # directly without looking for an existing command inside Commands.
-    bind 'knock' do
-      say "Who's there?"
+    bind 'alo' do
+      say '¿Quien está ahí?'
     end
 
-    bind 'hi', 'hello', 'yo', 'hey' do
-      say "Nice to meet you! Here's what I can do", quick_replies: HINTS
+    bind 'hi', 'hello', 'hola' do
+      say 'Encantado de conocerte! Esto es lo que puedes hacer:', quick_replies: HINTS
     end
 
     # Use with 'to:' and 'start_thread:' to point to the first
@@ -82,15 +68,17 @@ Bot.on :message do |message|
       quick_replies: questionnaire_replies
     }
 
-    bind 'where', 'am', 'I', all: true, to: :lookup_location, start_thread: {
-      message: 'Let me know your location',
+    bind 'descuentos cercanos', all: true, to: :lookup_location, start_thread: {
+      message: 'comparteme tu ubicación para poder ayudarte',
       quick_replies: LOCATION_PROMPT
     }
+
+    bind 'indicadores', 'economicos', 'económicos', to: :economic_indicators
 
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
     default do
-      say 'Here are some suggestions for you:', quick_replies: HINTS
+      say 'Aquí tengo algunas sugerencias para ti:', quick_replies: HINTS
     end
   end
 end
@@ -100,10 +88,11 @@ end
 Bot.on :postback do |postback|
   Rubotnik::PostbackDispatch.new(postback).route do
     bind 'START' do
-      say 'Hello and welcome!'
-      say 'Here are some suggestions for you:', quick_replies: HINTS
+      say 'Hola bienvenido!'
+      say 'Aquí tengo algunas sugerencias para ti:', quick_replies: HINTS
     end
 
+    bind 'INDICADORES', to: :economic_indicators
     bind 'CAROUSEL', to: :show_carousel
     bind 'BUTTON_TEMPLATE', to: :show_button_template
     bind 'IMAGE_ATTACHMENT', to: :send_image
@@ -122,8 +111,8 @@ Bot.on :postback do |postback|
     # No custom parameter passed, can use simplified syntax
     bind 'HORIZONTAL_IMAGES', to: :show_carousel
 
-    bind 'LOCATION', to: :lookup_location, start_thread: {
-      message: 'Let me know your location',
+    bind 'DESCUENTOS', to: :lookup_location, start_thread: {
+      message: 'comparteme tu ubicación para poder ayudarte',
       quick_replies: LOCATION_PROMPT
     }
 

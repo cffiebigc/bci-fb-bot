@@ -15,35 +15,14 @@ module Rubotnik
             composer_input_disabled: false,
             call_to_actions: [
               {
-                type: 'nested',
-                title: 'Sample UI elements',
-                call_to_actions: [
-                  {
-                    title: 'Generic Template',
-                    type: 'postback',
-                    payload: 'CAROUSEL'
-                  },
-                  {
-                    title: 'Button Template',
-                    type: 'postback',
-                    payload: 'BUTTON_TEMPLATE'
-                  },
-                  {
-                    title: 'Image Attachment',
-                    type: 'postback',
-                    payload: 'IMAGE_ATTACHMENT'
-                  }
-                ]
+                title: 'Indicadores Económicos',
+                type: 'postback',
+                payload: 'INDICADORES'
               },
               {
+                title: 'Descuentos cercanos',
                 type: 'postback',
-                title: 'Location lookup',
-                payload: 'LOCATION'
-              },
-              {
-                type: 'postback',
-                title: 'Sample questionnaire',
-                payload: 'QUESTIONNAIRE'
+                payload: 'DESCUENTOS'
               }
             ]
           }
