@@ -25,9 +25,33 @@ class LocationJob
   end
 
   def display_nearest_stores(distance_to_stores)
+    say 'Aqui tienes los descuentos cercanos a tu ubicación:'
     nearest_stores = Hash[distance_to_stores.sort_by { |key, val| key }]
     nearest_stores.first(3).each do |distance, store|
-      say "a #{distance.round} metros está #{store['title']}: con un descuendo de #{store['discount']}%"
+      UI::FBCarousel.new(store_template(store, distance)).square_images.send(@user)
     end
+  end
+
+  def store_template(store, distance)
+    puts store['covers'].first
+    [
+      {
+        title: "#{store['discount']}% descuento en #{store['title']}",
+        # Horizontal image should have 1.91:1 ratio
+        image_url: store['covers'].first || 'https://bci.modyocdn.com/uploads/d8ad8d0e-e049-4eea-b81d-9fb14cdce367/original/descuentos-generico-descuento_.jpg',
+        subtitle: "a #{distance.round} metros de tu ubicación, en #{store['location_street']}",
+        default_action: {
+          type: 'web_url',
+          url: store['url']
+        },
+        buttons: [
+          {
+            type: :web_url,
+            url: store['url'],
+            title: 'Sitio web'
+          }
+        ]
+      }
+    ]
   end
 end
