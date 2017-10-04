@@ -6,7 +6,7 @@ class LocationJob
 
   def perform(bci_client, user_lat, user_long, user)
     @user = user
-    stores = bci_client.beneficios.shopping['promotions']
+    stores = bci_client.beneficios.flavors['promotions']
     if stores.any?
       calculate_distance_to_stores(stores, user_lat, user_long)
     else
