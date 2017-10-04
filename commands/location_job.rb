@@ -33,11 +33,9 @@ class LocationJob
   end
 
   def store_template(store, distance)
-    puts store['covers'].first
     [
       {
-        title: "#{store['discount']}% descuento en #{store['title']}",
-        # Horizontal image should have 1.91:1 ratio
+        title: "#{store['discount'].to_s + '%' unless store['discount'].nil?} Descuento en #{store['title']}",
         image_url: store['covers'].first || 'https://bci.modyocdn.com/uploads/d8ad8d0e-e049-4eea-b81d-9fb14cdce367/original/descuentos-generico-descuento_.jpg',
         subtitle: "a #{distance.round} metros de tu ubicación, en #{store['location_street']}",
         default_action: {
