@@ -16,7 +16,6 @@ class LocationJob
 
   def calculate_distance_to_stores(stores, lat, long)
     distance_to_stores = {}
-    say 'Aqui tienes los descuentos cercanos a tu ubicación:'
     stores.each do |store|
       next if store['latitude'].nil? || store['longitude'].nil?
       distance = Haversine.distance(lat, long, store['latitude'].to_f, store['longitude'].to_f).to_meters

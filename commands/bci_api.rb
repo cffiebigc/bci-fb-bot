@@ -46,8 +46,7 @@ module BciApi
     parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
     address = extract_full_address(parsed) unless parsed.nil?
     @message.typing_off
-    say "Las coordenadas de tu ubicación son: Latitud #{lat}, Longitud #{long}. " \
-        "Al parecer estas cerca de #{address}"
+    say "Al parecer estas cerca de #{address}"
     say 'dame un momento para buscar los mejores descuentos:'
     LocationJob.perform_async(BCI, lat, long, @user)
   end
