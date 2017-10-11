@@ -1,7 +1,7 @@
 # Chatbot Developers BCI
 ### All you need to launch your own functional Ruby bot for Facebook Messenger integrated with BCI APIs
 
-[Talk to Demo Bot](http://m.me/chatbotbci/)
+[Talk to Demo Bot](http://m.me/chatbotbcidevelopers)
 
 It's as easy as:
 
