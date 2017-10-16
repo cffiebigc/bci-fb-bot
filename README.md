@@ -104,6 +104,8 @@ Once you have designed your bot and tested in on localhost, it's time to send it
 heroku create YOUR_APP_NAME
 heroku config:set ACCESS_TOKEN=your_own_page_token
 heroku config:set VERIFY_TOKEN=your_own_verify_token
+heroku config:set BCI_API_KEY=your_own_bci_api_key
+heroku config:set GOOGLE_API_KEY=your_own_google_api_key
 git push heroku master
 ```
 
