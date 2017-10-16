@@ -1,19 +1,17 @@
-![app logo](./docs/chatbot.png)
+![app logo](./docs/chatbot-small.png)
 
 # Chatbot Developers BCI
 ### All you need to launch your own functional Ruby bot for Facebook Messenger integrated with BCI APIs
 
 [Talk to Demo Bot](http://m.me/chatbotbcidevelopers)
 
-## Default actions
+## Bot actions integrated with APIs from BCI:
 
-There are 2 bot actions integrated with APIs from BCI:
-
-- `Indicadores`: Get the financial indicators on demand
+### - `Indicadores`: Get the financial indicators on demand
 
 ![](./docs/indicadores.gif)
 
-- `Descuentos cercanos`: Request the user location and display the 3 nearest discounts
+### - `Descuentos cercanos`: Request the user location and display the 3 nearest discounts
 
 ![](./docs/descuentos.gif)
 
@@ -28,11 +26,11 @@ This chatbot is based on **Rubotnik**, a minimalistic boilerplate and *a microfr
 
 # Setup
 
-## Register and create your app in the [developers portal](https://developers.bci.cl/) to get your `API_KEY`
+### Register and create your app in the [developers portal](https://developers.bci.cl/) to get your `API_KEY`
 
 ![](./docs/create-app-fast.gif)
 
-Follow [this instructions](https://developers.google.com/maps/documentation/directions/get-api-key) to get your `Google Maps API KEY`
+### Follow [this instructions](https://developers.google.com/maps/documentation/directions/get-api-key) to get your `Google Maps API KEY`
 
 Create a file named `.env` on the root level of the boilerplate. Create another file called `.gitignore` and add this single line of code:
 
