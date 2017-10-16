@@ -1,20 +1,54 @@
+![app logo](./docs/chatbot.png)
+
 # Chatbot Developers BCI
 ### All you need to launch your own functional Ruby bot for Facebook Messenger integrated with BCI APIs
 
 [Talk to Demo Bot](http://m.me/chatbotbcidevelopers)
 
-It's as easy as:
+## Default actions
+
+There are 2 bot actions integrated with APIs from BCI:
+
+- `Indicadores`: Get the financial indicators on demand
+
+![](./docs/indicadores.gif)
+
+- `Descuentos cercanos`: Request the user location and display the 3 nearest discounts
+
+![](./docs/descuentos.gif)
+
+### Create your own bot integrated with BCI, It's as easy as:
 
 1. Clone the boilerplate.
 2. Customize message bindings and commands for your bot.
 3. Push your bot to Heroku and review it with Facebook.
 4. You're live! :speech_balloon:
 
-**Rubotnik is a minimalistic boilerplate** and *a microframework proof-of-concept* that allows you to launch your functional bot on a Messenger Platform in a matter of minutes. It is a companion to ingenious [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) gem and piggybacks on its `Bot.on :event` triggers. The main promise of **Rubotnik** is to speed up bot development in Ruby and provide a more natural mental model for bot-user interactions. 
-
-[Rubotnik Documentation](https://github.com/progapandist/rubotnik-boilerplate)
+This chatbot is based on **Rubotnik**, a minimalistic boilerplate and *a microframework proof-of-concept* that allows you to launch your functional bot on a Messenger Platform in a matter of minutes. It is a companion to ingenious [facebook-messenger](https://github.com/hyperoslo/facebook-messenger) gem and piggybacks on its `Bot.on :event` triggers. The main promise of **Rubotnik** is to speed up bot development in Ruby and provide a more natural mental model for bot-user interactions. To learn more about bot interactions please read [Rubotnik's Documentation](https://github.com/progapandist/rubotnik-boilerplate)
 
 # Setup
+
+## Register and create your app in the [developers portal](https://developers.bci.cl/) to get your `API_KEY`
+
+![](./docs/create-app-fast.gif)
+
+Follow [this instructions](https://developers.google.com/maps/documentation/directions/get-api-key) to get your `Google Maps API KEY`
+
+Create a file named `.env` on the root level of the boilerplate. Create another file called `.gitignore` and add this single line of code:
+
+```
+.env
+```
+Save the `.gitignore` file. Now open your `.env` and put two tokens (one you've just generated and another you need to come up with and save for later) inside:
+
+```ruby
+BCI_API_KEY=your_recently_created_bci_api_key
+GOOGLE_API_KEY=your_google_maps_api_key
+
+```
+
+From now on, they can be referenced inside your program as `ENV['BCI_API_KEY']` and `ENV['GOOGLE_API_KEY']`.
+
 
 ## Facebook setup pt. 1. Tokens and environment variables.
 
@@ -28,12 +62,7 @@ In the resulting dashboard, under PRODUCTS/Messenger/Settings, scroll to **"Toke
 
 Copy **Page Access Token** and keep it at hand.
 
-Create a file named `.env` on the root level of the boilerplate. Create another file called `.gitignore` and add this single line of code:
-
-```
-.env
-```
-Save the `.gitignore` file. Now open your `.env` and put two tokens (one you've just generated and another you need to come up with and save for later) inside:
+Now open your `.env` and put two tokens (one you've just generated and another you need to come up with and save for later) inside:
 
 ```ruby
 ACCESS_TOKEN=your_page_access_token_from_the_dashboard
@@ -41,7 +70,7 @@ VERIFY_TOKEN=come_up_with_any_string_you_will_use_at_next_step
 
 ```
 
-From now on, they can be referenced inside your program as `ENV['ACCESS_TOKEN']` and `ENV['VERIFY_TOKEN']`.
+They can be referenced inside your program as `ENV['ACCESS_TOKEN']` and `ENV['VERIFY_TOKEN']`.
 
 **Note:**
 *Rubotnik stores its environment variables (aka config vars) locally in .env file (here goes the standard reminder to never check this file into remote repository) `heroku local` loads its contents automatically, so you don't need to worry about setting them manually. If you don't want to use `heroku local` and prefer an old good `rackup`, make sure to uncomment `require 'dotenv/load'` on top of `bot.rb` so variables will be loaded in your local environment by [dotenv](https://github.com/bkeepers/dotenv) gem. If you do so, don't forget to comment it out again before pushing to Heroku for production. In production, you will have to set your config variables by hand, either in your dashboard, or by using `heroku config:set VARIABLE_NAME=value` command in the terminal.*
@@ -67,13 +96,7 @@ Now that your bot is running on your machine, we need to connect it to the Messe
 
 ![webhook setup](./docs/webhook_setup.png)
 
-> :tada: Congrats! Your bot is connected to Facebook! You can start working on it.  
-
-## Default actions
-
-There are 2 bot actions integrated with APIs from BCI:
-- `Indicadores`: Get the financial indicators on demand
-- `Descuentos cercanos`: Request the user location and display the 3 nearest discounts
+> :tada: Congrats! Your bot is connected to Facebook! You can start working on it.
 
 # Deployment
 
