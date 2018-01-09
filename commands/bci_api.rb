@@ -62,7 +62,8 @@ module BciApi
     @message.typing_off
     say "Al parecer estas cerca de #{address}"
     say 'dame un momento para buscar los mejores descuentos:'
-    LocationJob.perform_async(BCI, lat, long, @user)
+    LocationJob.perform_async(BCI, lat, long, @user,@@category)
+    stop_thread
   end
 
   # Talk to API

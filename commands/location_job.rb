@@ -4,9 +4,24 @@ require 'haversine'
 class LocationJob
   include SuckerPunch::Job
 
-  def perform(bci_client, user_lat, user_long, user)
+  def perform(bci_client, user_lat, user_long, user,category)
     @user = user
-    stores = bci_client.beneficios.flavors['promotions']
+    case category
+    when 'Shopping'
+      stores = bci_client.beneficios.shopping['promotions']
+    when 'Tienda'
+      stores = bci_client.beneficios.store['products']
+    when 'Salud'
+      stores = bci_client.beneficios.health_and_beauty['promotions']
+    when 'Online'
+      stores = bci_client.beneficios.online_sales['promotions']
+    when 'Panoramas'
+      stores = bci_client.beneficios.outdoors['promotions']
+    when 'Sabores'
+      stores = bci_client.beneficios.flavors['promotions']
+    else
+      stores = {}
+    end
     if stores.any?
       calculate_distance_to_stores(stores, user_lat, user_long)
     else
