@@ -29,7 +29,6 @@ module BciApi
   end
 
   # Lookup based on location data from user's device
-  # Lookup based on location data from user's device
   def lookup_location
     case @message.quick_reply
     when 'SHOP'
