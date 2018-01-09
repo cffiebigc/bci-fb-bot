@@ -25,6 +25,13 @@ Rubotnik::PersistentMenu.enable
 HINTS = UI::QuickReplies.build(['Indicadores', 'INDICADORES'],
                                ['descuentos cercanos', 'LOCATION'])
 
+CATEGORIES = UI::QuickReplies.build(['Shopping', 'SHOP'],
+                               ['Tienda', 'STORE'],
+                               ['Salud y Belleza', 'HEALTH'],
+                               ['Venta Online', 'ONLINE'],
+                               ['Panoramas', 'VIEWS'],
+                               ['Sabores', 'FLAVORS'])
+
 # Build a quick reply that prompts location from user
 LOCATION_PROMPT = UI::QuickReplies.location
 
@@ -69,8 +76,8 @@ Bot.on :message do |message|
     }
 
     bind 'descuentos cercanos', all: true, to: :lookup_location, start_thread: {
-      message: 'comparteme tu ubicación para poder ayudarte',
-      quick_replies: LOCATION_PROMPT
+      message: 'Elige una de las categorías a continuación',
+      quick_replies: CATEGORIES
     }
 
     bind 'indicadores', 'economicos', 'económicos', to: :economic_indicators
