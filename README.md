@@ -60,7 +60,7 @@ In the resulting dashboard, under PRODUCTS/Messenger/Settings, scroll to **"Toke
 
 ![generate token](./docs/token_generation.png)
 
-Copy **Page Access Token** and keep it at hand.
+Copy **Page Access Token** and keep it at hand. Don't close this window.
 
 Now open your `.env` and put two tokens (one you've just generated and another you need to come up with and save for later) inside:
 
@@ -77,7 +77,9 @@ They can be referenced inside your program as `ENV['ACCESS_TOKEN']` and `ENV['VE
 
 ## Running on localhost
 
-Make sure you have [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). Run `heroku local` to start bot server on localhost. Provided you set up your token correctly, you should see something like this:
+Make sure you have [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and [bundle](http://bundler.io/). If you haven't done it before run `bundle install` to install all the required gems and once it finished run `heroku local` to start bot server on localhost.
+
+Provided you set up your token correctly, you should see something like this:
 
 ![server starts](./docs/server_start.png)
 
