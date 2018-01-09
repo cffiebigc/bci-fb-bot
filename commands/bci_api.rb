@@ -29,13 +29,27 @@ module BciApi
   end
 
   # Lookup based on location data from user's device
+  # Lookup based on location data from user's device
   def lookup_location
-    if message_contains_location?
-      handle_user_location
+    case @message.quick_reply
+    when 'SHOP'
+      @@category = 'Shopping'
+    when 'STORE'
+      @@category = 'Tienda'
+    when 'HEALTH'
+      @@category = 'Salud'
+    when 'ONLINE'
+      @@category = 'Online'
+    when 'VIEWS'
+      @@category = 'Panoramas'
+    when 'FLAVORS'
+      @@category = 'Sabores'
     else
-      say 'Por favor intenta nuevamente'
+      @@category = ''
     end
-    stop_thread
+    say 'comparteme tu ubicación para poder ayudarte',
+    quick_replies: UI::QuickReplies.location
+    next_command :handle_user_location
   end
 
   def handle_user_location
