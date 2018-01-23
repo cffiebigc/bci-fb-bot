@@ -75,7 +75,7 @@ Bot.on :message do |message|
       quick_replies: questionnaire_replies
     }
 
-    bind 'descuentos cercanos', all: true, to: :lookup_location, start_thread: {
+    bind 'descuentos cercanos', all: true, to: :select_categories, start_thread: {
       message: 'Elige una de las categorías a continuación',
       quick_replies: CATEGORIES
     }
@@ -118,9 +118,9 @@ Bot.on :postback do |postback|
     # No custom parameter passed, can use simplified syntax
     bind 'HORIZONTAL_IMAGES', to: :show_carousel
 
-    bind 'DESCUENTOS', to: :lookup_location, start_thread: {
-      message: 'comparteme tu ubicación para poder ayudarte',
-      quick_replies: LOCATION_PROMPT
+    bind 'DESCUENTOS', to: :select_categories, start_thread: {
+      message: 'Elige una de las categorías a continuación',
+      quick_replies: CATEGORIES
     }
 
     bind 'QUESTIONNAIRE', to: :start_questionnaire, start_thread: {
