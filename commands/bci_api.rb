@@ -29,26 +29,44 @@ module BciApi
   end
 
   # Lookup based on location data from user's device
-  def lookup_location
-    if message_contains_location?
-      handle_user_location
+  def select_categories
+    case @message.quick_reply
+    when 'SHOP'
+      @@category = 'Shopping'
+    when 'STORE'
+      @@category = 'Tienda'
+    when 'HEALTH'
+      @@category = 'Salud'
+    when 'ONLINE'
+      @@category = 'Online'
+    when 'VIEWS'
+      @@category = 'Panoramas'
+    when 'FLAVORS'
+      @@category = 'Sabores'
     else
-      say 'Por favor intenta nuevamente'
+      @@category = ''
     end
-    stop_thread
+    say 'comparteme tu ubicación para poder ayudarte',
+    quick_replies: UI::QuickReplies.location
+    next_command :handle_user_location
   end
 
   def handle_user_location
     @message.typing_on
-    coords = @message.attachments.first['payload']['coordinates']
-    lat = coords['lat']
-    long = coords['long']
-    parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
-    address = extract_full_address(parsed) unless parsed.nil?
-    @message.typing_off
-    say "Al parecer estas cerca de #{address}"
-    say 'dame un momento para buscar los mejores descuentos:'
-    LocationJob.perform_async(BCI, lat, long, @user)
+    if message_contains_location?
+      coords = @message.attachments.first['payload']['coordinates']
+      lat = coords['lat']
+      long = coords['long']
+      parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
+      address = extract_full_address(parsed) unless parsed.nil?
+      @message.typing_off
+      say "Al parecer estas cerca de #{address}"
+      say 'dame un momento para buscar los mejores descuentos:'
+      LocationJob.perform_async(BCI, lat, long, @user,@@category)
+    else
+      say "Hubo un problema al obtener la ubicacion"
+    end
+    stop_thread
   end
 
   # Talk to API
