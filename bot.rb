@@ -23,7 +23,8 @@ Rubotnik::PersistentMenu.enable
 # if a set of quick replies is an array of arrays.
 # e.g. UI::QuickReplies.build(*replies)
 HINTS = UI::QuickReplies.build(['Indicadores', 'INDICADORES'],
-                               ['descuentos cercanos', 'LOCATION'])
+                               ['descuentos cercanos', 'LOCATION'],
+                               ['Simulación Crédito', 'CONSUMO'])
 
 CATEGORIES = UI::QuickReplies.build(['Shopping', 'SHOP'],
                                ['Tienda', 'STORE'],
@@ -46,6 +47,8 @@ questionnaire_welcome = 'Welcome to the sample questionnaire! Are you ready?'
 Bot.on :message do |message|
   # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
+    message.mark_seen
+    message.typing_on
     # All strings will be turned into case insensitive regular expressions.
     # If you pass a number of strings, any match will trigger a command,
     # unless 'all: true' flag is present. In that case, MessageDispatch
@@ -81,6 +84,10 @@ Bot.on :message do |message|
     }
 
     bind 'indicadores', 'economicos', 'económicos', to: :economic_indicators
+
+    bind 'simulación', 'simulacion', 'simular', to: :validar_monto, start_thread: {
+      message: 'Para que pueda realizar la simulación de un crédito de consumo, necesito saber el monto solicitado'
+    }
 
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.

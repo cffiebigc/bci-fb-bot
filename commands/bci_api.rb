@@ -1,5 +1,8 @@
 require 'bci'
 require_relative 'location_job'
+
+OPTIONS = UI::QuickReplies.build(['Si', 'SI'],
+                               ['No', 'NO'])
 # Everything in this module will become private methods for Dispatch classes
 # and will exist in a shared namespace.
 module BciApi
@@ -78,5 +81,40 @@ module BciApi
 
   def extract_full_address(parsed)
     parsed['results'].first['formatted_address']
+  end
+
+  def validar_monto
+    @message.mark_seen
+    @message.typing_on
+    begin
+      @@montoCredito = Integer(@message.text.gsub(/\.*,*/,''))
+      say 'Gracias, ahora necesito que me digas cuántas cuotas'
+      next_command :validar_cuotas
+    rescue
+      say 'Ese no es un número válido, por favor ingresa el monto solicitado para simular el crédito'
+      next_command :validar_monto
+    end
+  end
+
+  def validar_cuotas
+    @message.mark_seen
+    @message.typing_on
+    begin
+      puts Integer(@message.text.gsub(/\.*,*/,''))
+      @@cantidadCuotas = Integer(@message.text.gsub(/\.*,*/,''))
+      say 'Entonces, quieres solicitar un crédito de $' + String(@@montoCredito) + ' en ' + String(@@cantidadCuotas) + ' cuotas',
+      quick_replies: OPTIONS
+      next_command :simulate_credito_consumo
+    rescue
+      say 'Ese no es un número válido, por favor ingresa la cantidad de cuotas para poder realizar la simulación'
+      next_command :validar_cuotas
+    end
+  end
+
+  def simulate_credito_consumo
+    @message.mark_seen
+    @message.typing_on unless @message.nil?
+    @message.typing_off
+    stop_thread
   end
 end
