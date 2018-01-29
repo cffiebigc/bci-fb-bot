@@ -86,7 +86,7 @@ Bot.on :message do |message|
     bind 'indicadores', 'economicos', 'económicos', to: :economic_indicators
 
     bind 'simulación', 'simulacion', 'simular', to: :validar_monto, start_thread: {
-      message: '¿Cuánto es el monto que quieres solicitar?'
+      message: '¿Cuánto es el monto que quieres simular?'
     }
 
     # Falback action if none of the commands matched the input,
