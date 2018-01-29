@@ -3,6 +3,13 @@ require_relative 'location_job'
 
 OPTIONS = UI::QuickReplies.build(['Si', 'SI'],
                                ['No', 'NO'])
+
+def separador_miles(numero)
+  numero = String(numero).gsub(/\./,"")
+  numero = numero.reverse!.gsub(/(?=\d*\.?)(\d{3})/){$1+'.'}
+  numero = numero.reverse!.gsub(/^[\.]/,"")
+  return numero
+end
 # Everything in this module will become private methods for Dispatch classes
 # and will exist in a shared namespace.
 module BciApi
@@ -87,11 +94,12 @@ module BciApi
     @message.mark_seen
     @message.typing_on
     begin
-      @@montoCredito = Integer(@message.text.gsub(/\.*,*/,''))
+      @@montoCredito = @message.text.gsub(/([^\d*.])/,'')
+      @@montoCredito = Integer(@@montoCredito.gsub(/\.*,*/,''))
       say 'Gracias, ahora necesito que me digas cuántas cuotas'
       next_command :validar_cuotas
     rescue
-      say 'Ese no es un número válido, por favor ingresa el monto solicitado para simular el crédito'
+      say 'No entendí bien, ¿Puedes escribir de nuevo el monto?'
       next_command :validar_monto
     end
   end
@@ -100,21 +108,46 @@ module BciApi
     @message.mark_seen
     @message.typing_on
     begin
-      puts Integer(@message.text.gsub(/\.*,*/,''))
-      @@cantidadCuotas = Integer(@message.text.gsub(/\.*,*/,''))
-      say 'Entonces, quieres solicitar un crédito de $' + String(@@montoCredito) + ' en ' + String(@@cantidadCuotas) + ' cuotas',
+      @@cantidadCuotas = @message.text.gsub(/([^\d*.])/,'')
+      @@cantidadCuotas = Integer(@@cantidadCuotas.gsub(/\.*,*/,''))
+      say 'Entonces, quieres solicitar un crédito de $' + String(separador_miles(@@montoCredito)) + ' en ' + String(separador_miles(@@cantidadCuotas)) + ' cuotas',
       quick_replies: OPTIONS
-      next_command :simulate_credito_consumo
+      next_command :options
     rescue
-      say 'Ese no es un número válido, por favor ingresa la cantidad de cuotas para poder realizar la simulación'
+      say 'No entendí bien, ¿Puedes escribir de nuevo el número de cuotas?'
       next_command :validar_cuotas
+    end
+  end
+
+  def options
+    @message.mark_seen
+    if @message.quick_reply=="SI"
+      simulate_credito_consumo
+    elsif @message.quick_reply=="NO"
+      say 'Al parecer ingresaste mal los datos'
+      @message.typing_on
+      say 'Voy a pedirtelos nuevamente'
+      @message.typing_on
+      say 'Por favor, escribe el monto'
+      next_command :validar_monto
+    else
+      stop_thread
     end
   end
 
   def simulate_credito_consumo
     @message.mark_seen
-    @message.typing_on unless @message.nil?
-    @message.typing_off
+    @message.typing_on
+    say 'Dame un momento para poder calcular los datos'
+    params = {'rut' => '7', 'dv' => '7', 'renta' => '7', 'montoCredito' => @@montoCredito, 'cantidadCuotas' => @@cantidadCuotas, "fechaPrimerVencimiento" => "7"}
+    cons = BCI.consumo.simulate("1",params)
+    if cons.any?
+      @message.typing_on
+      say 'El monto de cada cuota es de $' + String(separador_miles(cons["montoCuota"]))
+    else
+      @message.typing_on
+      say 'Al parecer ocurrió un problema, por favor intentalo más tarde'
+    end
     stop_thread
   end
 end
