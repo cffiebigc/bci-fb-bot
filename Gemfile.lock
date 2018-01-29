@@ -11,7 +11,7 @@ GEM
   specs:
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
-    bci (17.0.2)
+    bci (18.0.0)
       rest-client (>= 2.0.2)
     concurrent-ruby (1.0.5)
     domain_name (0.5.20170404)
@@ -65,4 +65,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.16.0.pre.2
+   1.16.1

@@ -23,7 +23,15 @@ Rubotnik::PersistentMenu.enable
 # if a set of quick replies is an array of arrays.
 # e.g. UI::QuickReplies.build(*replies)
 HINTS = UI::QuickReplies.build(['Indicadores', 'INDICADORES'],
-                               ['descuentos cercanos', 'LOCATION'])
+                               ['descuentos cercanos', 'LOCATION'],
+                               ['Simulación Crédito', 'CONSUMO'])
+
+CATEGORIES = UI::QuickReplies.build(['Shopping', 'SHOP'],
+                               ['Tienda', 'STORE'],
+                               ['Salud y Belleza', 'HEALTH'],
+                               ['Venta Online', 'ONLINE'],
+                               ['Panoramas', 'VIEWS'],
+                               ['Sabores', 'FLAVORS'])
 
 # Build a quick reply that prompts location from user
 LOCATION_PROMPT = UI::QuickReplies.location
@@ -39,6 +47,8 @@ questionnaire_welcome = 'Welcome to the sample questionnaire! Are you ready?'
 Bot.on :message do |message|
   # Use DSL inside the following block:
   Rubotnik::MessageDispatch.new(message).route do
+    message.mark_seen
+    message.typing_on
     # All strings will be turned into case insensitive regular expressions.
     # If you pass a number of strings, any match will trigger a command,
     # unless 'all: true' flag is present. In that case, MessageDispatch
@@ -68,12 +78,16 @@ Bot.on :message do |message|
       quick_replies: questionnaire_replies
     }
 
-    bind 'descuentos cercanos', all: true, to: :lookup_location, start_thread: {
-      message: 'comparteme tu ubicación para poder ayudarte',
-      quick_replies: LOCATION_PROMPT
+    bind 'descuentos cercanos', all: true, to: :select_categories, start_thread: {
+      message: 'Elige una de las categorías a continuación',
+      quick_replies: CATEGORIES
     }
 
     bind 'indicadores', 'economicos', 'económicos', to: :economic_indicators
+
+    bind 'simulación', 'simulacion', 'simular', to: :validar_monto, start_thread: {
+      message: '¿Cuánto es el monto que quieres solicitar?'
+    }
 
     # Falback action if none of the commands matched the input,
     # NB: Should always come last. Takes a block.
@@ -111,9 +125,9 @@ Bot.on :postback do |postback|
     # No custom parameter passed, can use simplified syntax
     bind 'HORIZONTAL_IMAGES', to: :show_carousel
 
-    bind 'DESCUENTOS', to: :lookup_location, start_thread: {
-      message: 'comparteme tu ubicación para poder ayudarte',
-      quick_replies: LOCATION_PROMPT
+    bind 'DESCUENTOS', to: :select_categories, start_thread: {
+      message: 'Elige una de las categorías a continuación',
+      quick_replies: CATEGORIES
     }
 
     bind 'QUESTIONNAIRE', to: :start_questionnaire, start_thread: {
