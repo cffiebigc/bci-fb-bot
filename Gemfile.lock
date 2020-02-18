@@ -31,7 +31,7 @@ GEM
     public_suffix (2.0.5)
     puma (4.3.1)
       nio4r (~> 2.0)
-    rack (1.6.5)
+    rack (1.6.13)
     rack-protection (1.5.3)
       rack
     rest-client (2.0.2)
